@@ -24,3 +24,11 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Mobile-first 375px centered layout */
+.mobile-container {
+  max-width: 375px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: white;
+}
