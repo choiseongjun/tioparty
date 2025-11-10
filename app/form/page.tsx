@@ -15,6 +15,28 @@ export default function Home() {
     guestCount: ''
   });
 
+  // 오늘 날짜를 YYYY-MM-DD 형식으로 가져오기
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  // 10분 단위 시간 옵션 생성
+  const generateTimeOptions = () => {
+    const times = [];
+    for (let hour = 0; hour < 24; hour++) {
+      for (let minute = 0; minute < 60; minute += 10) {
+        const h = String(hour).padStart(2, '0');
+        const m = String(minute).padStart(2, '0');
+        times.push(`${h}:${m}`);
+      }
+    }
+    return times;
+  };
+
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -153,6 +175,7 @@ export default function Home() {
             <input
               type="date"
               value={formData.date}
+              min={getTodayDate()}
               onChange={(e) => handleInputChange('date', e.target.value)}
               className="w-full py-3 px-4 rounded-lg border-2 border-gray-200 bg-white text-gray-900 font-medium focus:border-purple-600 focus:outline-none"
             />
@@ -161,12 +184,16 @@ export default function Home() {
             <label className="block text-sm font-semibold text-gray-900 mb-3">
               시간 <span className="text-red-500">*</span>
             </label>
-            <input
-              type="time"
+            <select
               value={formData.time}
               onChange={(e) => handleInputChange('time', e.target.value)}
               className="w-full py-3 px-4 rounded-lg border-2 border-gray-200 bg-white text-gray-900 font-medium focus:border-purple-600 focus:outline-none"
-            />
+            >
+              <option value="">선택</option>
+              {generateTimeOptions().map(time => (
+                <option key={time} value={time}>{time}</option>
+              ))}
+            </select>
           </div>
         </div>
 
