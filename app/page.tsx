@@ -55,13 +55,22 @@ export default function LandingPage() {
           ))}
         </div>
 
-        {/* CTA Button */}
-        <button
-          onClick={() => router.push('/form')}
-          className="w-full py-4 rounded-full font-bold text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 active:from-purple-800 active:to-pink-800 shadow-lg transition-all transform hover:scale-105"
-        >
-          무료 견적 받기
-        </button>
+        {/* CTA Buttons */}
+        <div className="w-full space-y-3">
+          <button
+            onClick={() => router.push('/form')}
+            className="w-full py-4 rounded-full font-bold text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 active:from-purple-800 active:to-pink-800 shadow-lg transition-all transform hover:scale-105"
+          >
+            무료 견적 받기
+          </button>
+
+          <button
+            onClick={() => router.push('/reviews')}
+            className="w-full py-4 rounded-full font-bold text-purple-600 bg-white border-2 border-purple-600 hover:bg-purple-50 active:bg-purple-100 shadow-md transition-all"
+          >
+            고객 후기 보기 ⭐
+          </button>
+        </div>
 
         {/* Trust Badge */}
         <div className="mt-6 text-center">
