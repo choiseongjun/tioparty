@@ -8,9 +8,11 @@ export default function Home() {
   const [formData, setFormData] = useState({
     partyType: '',
     partyCategory: '',
+    partyCategoryCustom: '',
     region: '',
     date: '',
-    time: '',
+    startTime: '',
+    endTime: '',
     eventType: '',
     guestCount: ''
   });
@@ -47,8 +49,9 @@ export default function Home() {
   };
 
   const isFormValid = formData.partyType && formData.partyCategory &&
+                      (formData.partyCategory !== '기타' || formData.partyCategoryCustom.trim() !== '') &&
                       formData.region && formData.date &&
-                      formData.time && formData.eventType &&
+                      formData.startTime && formData.endTime && formData.eventType &&
                       (formData.partyType === '개인' || formData.guestCount !== '');
 
   return (
@@ -129,7 +132,12 @@ export default function Home() {
             {['생일파티', '송년회', '회식', '기타'].map(category => (
               <button
                 key={category}
-                onClick={() => handleInputChange('partyCategory', category)}
+                onClick={() => {
+                  handleInputChange('partyCategory', category);
+                  if (category !== '기타') {
+                    handleInputChange('partyCategoryCustom', '');
+                  }
+                }}
                 className={`py-3 px-4 rounded-lg border-2 font-medium transition-all ${
                   formData.partyCategory === category
                     ? 'border-purple-600 bg-purple-50 text-purple-700'
@@ -140,6 +148,19 @@ export default function Home() {
               </button>
             ))}
           </div>
+
+          {/* 기타 선택 시 직접 입력 */}
+          {formData.partyCategory === '기타' && (
+            <div className="mt-3">
+              <input
+                type="text"
+                value={formData.partyCategoryCustom}
+                onChange={(e) => handleInputChange('partyCategoryCustom', e.target.value)}
+                placeholder="행사 종류를 입력해주세요 (예: 돌잔치, 결혼식 등)"
+                className="w-full py-3 px-4 rounded-lg border-2 border-gray-200 bg-white text-gray-900 focus:border-purple-600 focus:outline-none"
+              />
+            </div>
+          )}
         </div>
 
         {/* 지역 선택 */}
@@ -166,27 +187,44 @@ export default function Home() {
           </select>
         </div>
 
-        {/* 날짜 및 시간 */}
+        {/* 날짜 */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-900 mb-3">
+            날짜 <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="date"
+            value={formData.date}
+            min={getTodayDate()}
+            onChange={(e) => handleInputChange('date', e.target.value)}
+            className="w-full py-3 px-4 rounded-lg border-2 border-gray-200 bg-white text-gray-900 font-medium focus:border-purple-600 focus:outline-none"
+          />
+        </div>
+
+        {/* 시작 및 종료 시간 */}
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-3">
-              날짜 <span className="text-red-500">*</span>
+              시작 시간 <span className="text-red-500">*</span>
             </label>
-            <input
-              type="date"
-              value={formData.date}
-              min={getTodayDate()}
-              onChange={(e) => handleInputChange('date', e.target.value)}
+            <select
+              value={formData.startTime}
+              onChange={(e) => handleInputChange('startTime', e.target.value)}
               className="w-full py-3 px-4 rounded-lg border-2 border-gray-200 bg-white text-gray-900 font-medium focus:border-purple-600 focus:outline-none"
-            />
+            >
+              <option value="">선택</option>
+              {generateTimeOptions().map(time => (
+                <option key={time} value={time}>{time}</option>
+              ))}
+            </select>
           </div>
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-3">
-              시간 <span className="text-red-500">*</span>
+              종료 시간 <span className="text-red-500">*</span>
             </label>
             <select
-              value={formData.time}
-              onChange={(e) => handleInputChange('time', e.target.value)}
+              value={formData.endTime}
+              onChange={(e) => handleInputChange('endTime', e.target.value)}
               className="w-full py-3 px-4 rounded-lg border-2 border-gray-200 bg-white text-gray-900 font-medium focus:border-purple-600 focus:outline-none"
             >
               <option value="">선택</option>
